@@ -6,8 +6,6 @@ var logger = require('morgan');
 
 // main server routers
 var indexRouter = require('./app_server/routes/index');
-//var usersRouter = require('./app_server/routes/users');
-
 // rest api router
 var apiRouter = require('./app_api/routes/api');
 
@@ -25,8 +23,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // set endpoints for main server routers
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
-
 // set endpoint for rest api router
 app.use('/api', apiRouter);
 

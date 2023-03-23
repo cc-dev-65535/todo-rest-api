@@ -13,3 +13,5 @@ router.route('/todos/:category')
 router.route('/todos/:todosId')
     .put(controllerTodo.updateTodo)
     .delete(controllerTodo.deleteTodo);
+
+module.exports = router;
