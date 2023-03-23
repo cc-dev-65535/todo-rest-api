@@ -10,8 +10,13 @@ async function listAllTodos(req, res) {
 }
 
 // CREATE a todo
-function createTodo(req, res) {
-
+async function createTodo(req, res) {
+    const newTodo = new Todo({ author: req.body.category, 
+                            description: req.body.description, 
+                            category: req.body.category});
+    const savedTodo = await newTodo.save();
+    res.status(201)
+        .json(savedTodo);
 }
 
 

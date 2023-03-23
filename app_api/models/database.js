@@ -13,11 +13,10 @@ mongoose.connection.on('connected', () => {
 });
 
 // handle closing the database connection on process termination
-process.on('SIGINT', () => {
-    mongoose.connection.close(() => {
-      console.log('Mongoose disconnected');
-      process.exit(0);
-    });
+process.on('SIGINT', async () => {
+    await mongoose.connection.close();
+    console.log('Mongoose disconnected');
+    process.exit(0);
 });
 
 require('./todo')
