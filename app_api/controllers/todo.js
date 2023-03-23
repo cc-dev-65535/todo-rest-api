@@ -1,20 +1,31 @@
-function listAllTodos() {
+const mongoose = require('mongoose');
+// retrieve the previously defined todo model
+const Todo = mongoose.model('Todo');
+
+// READ all todos
+function listAllTodos(req, res) {
+    Todo.find();
+}
+
+// CREATE a todo
+function createTodo(req, res) {
 
 }
 
-function createTodo() {
+
+// READ todos by category
+function listTodosByCategory(req, res) {
 
 }
 
-function listTodosByCategory() {
-    
-}
 
-function updateTodo() {
+// UPDATE a todo
+function updateTodo(req, res) {
 
 }
 
-function deleteTodo() {
+//DELETE a todo
+function deleteTodo(req, res) {
 
 }
 

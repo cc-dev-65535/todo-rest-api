@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// model a todo entity in this application
 const todoSchema = new mongoose.Schema({
     author: {
         type: String,
@@ -19,4 +20,4 @@ const todoSchema = new mongoose.Schema({
     }
 });
 
-const todo = mongoose.model('Todo', todoSchema);
+mongoose.model('Todo', todoSchema);

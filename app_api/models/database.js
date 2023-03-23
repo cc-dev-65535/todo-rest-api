@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-// set up either local or production development database connection string
+// set up either development or production database connection string
 let dbConnectionString = "mongodb://localhost:27017/todo";
 if (process.env.NODE_ENV === 'production') {
-    dbConnectionString = process.env.MONGODB_URI;
+    dbConnectionString = process.env.MONGODB_PRODUCTION_URI;
 }
 
 mongoose.connect(dbConnectionString);
