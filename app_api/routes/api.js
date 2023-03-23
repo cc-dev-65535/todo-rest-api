@@ -10,7 +10,7 @@ router.route('/todos/:category')
     .get(controllerTodo.listTodosByCategory);
 
 // routing for UPDATE AND DELETE requests
-router.route('/todos/:todosId')
+router.route('/todos/:todosID')
     .put(controllerTodo.updateTodo)
     .delete(controllerTodo.deleteTodo);
 

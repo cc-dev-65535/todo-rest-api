@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const Todo = mongoose.model('Todo');
 
 // READ all todos
-function listAllTodos(req, res) {
-    Todo.find();
+async function listAllTodos(req, res) {
+    const allTodos = await Todo.find({}).exec();
+    res.status(200)
+        .json(allTodos);
 }
 
 // CREATE a todo
@@ -14,8 +16,10 @@ function createTodo(req, res) {
 
 
 // READ todos by category
-function listTodosByCategory(req, res) {
-
+async function listTodosByCategory(req, res) {
+    const categoryTodos = await Todo.find({ category: req.params.category }).exec();
+    res.status(200)
+        .json(categoryTodos);
 }
 
 
@@ -24,7 +28,7 @@ function updateTodo(req, res) {
 
 }
 
-//DELETE a todo
+// DELETE a todo
 function deleteTodo(req, res) {
 
 }
