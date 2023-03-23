@@ -1,5 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const controllerToDo = require('../controllers/todo');
+const controllerTodo = require('../controllers/todo');
 
-router.route('/').get('', controllerToDo);
+// routing for CREATE AND READ requests
+router.route('/todos')
+    .get(controllerTodo.listAllTodos)
+    .post(controllerTodo.createTodo);
+router.route('/todos/:category')
+    .get(controllerTodo.listTodosByCategory);
+
+// routing for UPDATE AND DELETE requests
+router.route('/todos/:todosId')
+    .put(controllerTodo.updateTodo)
+    .delete(controllerTodo.deleteTodo);
