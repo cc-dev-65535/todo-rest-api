@@ -19,4 +19,5 @@ process.on('SIGINT', async () => {
     process.exit(0);
 });
 
-require('./todo')
+require('./todo');
+require('./user');
