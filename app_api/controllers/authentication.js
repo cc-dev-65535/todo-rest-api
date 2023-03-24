@@ -22,7 +22,16 @@ async function register(req, res) {
 
 // handle a user login request
 async function login(req, res) {
+    const authHeader = req.get("Authorization");
+    if (!authHeader) {
+        return res.status(400)
+                    .json({"message": "missing HTTP headers"});
+    }
 
+    const [login, password] = Buffer.from(authHeader.split(" ")[1], 'base64').toString().split(':');
+    res.status(200)
+        .json({"message": login,
+        "messge": password});
 }
 
 // handle a user logout request
