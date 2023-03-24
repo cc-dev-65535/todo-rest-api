@@ -23,9 +23,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// set endpoints for main server routers
+// set url path for main server routers
 app.use('/', indexRouter);
-// set endpoint for rest api router
+// set url path for rest api router
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler

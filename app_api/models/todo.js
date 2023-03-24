@@ -17,6 +17,10 @@ const todoSchema = new mongoose.Schema({
     dateCreated: {
         type: Date,
         default: Date.now
+    },
+    owner: {
+        type: mongoose.ObjectId,
+        required: true
     }
 });
 

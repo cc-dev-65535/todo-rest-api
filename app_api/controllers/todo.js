@@ -4,17 +4,24 @@ const Todo = mongoose.model('Todo');
 
 // READ all todos
 async function listAllTodos(req, res) {
-    const allTodos = await Todo.find({}).exec();
+    const allTodos = await Todo.find({})
+                                .select('-owner')
+                                .exec();
     res.status(200)
         .json(allTodos);
 }
 
 // CREATE a todo
 async function createTodo(req, res) {
-    const newTodo = new Todo({ author: req.body.category, 
-                            description: req.body.description, 
-                            category: req.body.category});
-    const savedTodo = await newTodo.save();
+    const newTodo = new Todo({ author: req.body.author,
+                                description: req.body.description, 
+                                category: req.body.category});
+    try {
+        const savedTodo = await newTodo.save();
+    } catch (error) {
+        return res.status(400)
+                    .json(error);
+    }
     res.status(201)
         .json(savedTodo);
 }
@@ -22,7 +29,9 @@ async function createTodo(req, res) {
 
 // READ todos by category
 async function listTodosByCategory(req, res) {
-    const categoryTodos = await Todo.find({ category: req.params.category }).exec();
+    const categoryTodos = await Todo.find({ category: req.params.category })
+                                    .select('-owner')
+                                    .exec();
     res.status(200)
         .json(categoryTodos);
 }
