@@ -1,14 +1,15 @@
+const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 // register a new user and password into the users database
 async function register(req, res) {
-    if (!req.body.userID || !req.body.password) {
+    if (!req.body.username || !req.body.password) {
         return res.status(400)
                     .json({"message": "missing fields"});
     }
 
-    const user = new User({ userID: req.body.userID });
+    const user = new User({ userID: req.body.username });
     user.createPassword(req.body.password);
     try {
         const savedUser = await user.save();
@@ -22,16 +23,14 @@ async function register(req, res) {
 
 // handle a user login request
 async function login(req, res) {
-    const authHeader = req.get("Authorization");
-    if (!authHeader) {
+    if (!req.body.username || !req.body.password) {
         return res.status(400)
-                    .json({"message": "missing HTTP headers"});
+                    .json({"message": "missing fields"});
     }
-
-    const [login, password] = Buffer.from(authHeader.split(" ")[1], 'base64').toString().split(':');
-    res.status(200)
-        .json({"message": login,
-        "messge": password});
+    
+    passport.authenticate('local', (err, user, msg) => {
+        
+    })(req, res)
 }
 
 // handle a user logout request

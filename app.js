@@ -3,18 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const passport = require('passport');
 // Initialize database connection
 require('./app_api/models/database');
+require('./app_api/models/passport');
 
-// main server routers
-var indexRouter = require('./app_server/routes/index');
 // rest api router
 var apiRouter = require('./app_api/routes/api');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
@@ -22,9 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// add passport authentication middleware
+app.use(passport.initialize());
 
-// set url path for main server routers
-app.use('/', indexRouter);
 // set url path for rest api router
 app.use('/api', apiRouter);
 
