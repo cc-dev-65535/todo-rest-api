@@ -13,4 +13,9 @@ const userSchema = new mongoose.Schema({
     }
 });
 
+// validate the supplied password in an API request
+userSchema.methods.validate = function(password) {
+    return this.password === password;
+} 
+
 mongoose.model('User', userSchema);

@@ -19,7 +19,7 @@ const todoSchema = new mongoose.Schema({
         default: Date.now
     },
     owner: {
-        type: mongoose.ObjectId,
+        type: String,
         required: true
     }
 });

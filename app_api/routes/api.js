@@ -15,7 +15,7 @@ router.route('/todos/:todosID')
     .put(controllerTodo.updateTodo)
     .delete(controllerTodo.deleteTodo);
 
-// routing for authentication requests
+// routing for authentication-related requests
 router.post('/register', controllerAuthentication.register);
 router.post('/login', controllerAuthentication.login);
 router.get('/logout', controllerAuthentication.logout);

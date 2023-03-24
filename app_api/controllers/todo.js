@@ -36,6 +36,11 @@ async function listTodosByCategory(req, res) {
         .json(categoryTodos);
 }
 
+// READ todos by userID
+function listTodosByUser() {
+    
+}
+
 
 // UPDATE a todo
 function updateTodo(req, res) {
