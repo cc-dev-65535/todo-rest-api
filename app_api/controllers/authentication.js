@@ -6,50 +6,41 @@ const User = mongoose.model('User');
 async function register(req, res) {
     if (!req.body.username || !req.body.password) {
         return res.status(400)
-                    .json({"message": "missing fields"});
+                    .json({"error": "missing fields"});
     }
 
     const user = new User({ userID: req.body.username });
     user.createPassword(req.body.password);
+    let savedUser;
     try {
-        const savedUser = await user.save();
+        savedUser = await user.save();
     } catch (error) {
         return res.status(400)
                     .json(error);
     }
     res.status(200)
-        .json({"message": "user account created"});
+        .json({"success": "user account created"});
 }
 
 // handle a user login request
 async function login(req, res) {
     if (!req.body.username || !req.body.password) {
         return res.status(400)
-                    .json({"message": "missing fields"});
+                    .json({"error": "missing fields"});
     }
     
-    (passport.authenticate('local', (err, user, msg) => {
-        if (err) {
-            return res.status(400)
-                        .json(err);
-        }
+    (passport.authenticate('local', (error, user) => {
         if (user) {
             const token = user.createJwt();
             return res.status(200)
-                        .json({token});
+                        .json({"token": token});
         }
         return res.status(400)
-                    .json(err);
+                    .json(error);
     }))(req, res);
-}
-
-// handle a user logout request
-async function logout(req, res) {
-
 }
 
 module.exports = {
     register,
-    login,
-    logout
+    login
 };

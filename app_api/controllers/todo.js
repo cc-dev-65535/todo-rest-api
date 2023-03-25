@@ -4,10 +4,11 @@ const Todo = mongoose.model('Todo');
 
 // READ all todos
 async function listAllTodos(req, res) {
+    let allTodos;
     try {
-        const allTodos = await Todo.find({})
-                                    .select('-owner')
-                                    .exec();
+        allTodos = await Todo.find({})
+                                .select('-owner')
+                                .exec();
     } catch (error) {
         return res.status(400)
                     .json(error);
@@ -20,14 +21,15 @@ async function listAllTodos(req, res) {
 async function createTodo(req, res) {
     if (!req.body.author || !req.body.description || !req.body.category) {
         return res.status(400)
-                    .json({"message": "missing fields"});
+                    .json({"error": "missing fields"});
     }
 
     const newTodo = new Todo({ author: req.body.author,
                                 description: req.body.description, 
                                 category: req.body.category});
+    let savedTodo;
     try {
-        const savedTodo = await newTodo.save();
+        savedTodo = await newTodo.save();
     } catch (error) {
         return res.status(400)
                     .json(error);
@@ -39,8 +41,9 @@ async function createTodo(req, res) {
 
 // READ todos by category
 async function listTodosByCategory(req, res) {
+    let categoryTodos;
     try{
-        const categoryTodos = await Todo.find({ category: req.params.category })
+        categoryTodos = await Todo.find({ category: req.params.category })
                                     .select('-owner')
                                     .exec();
     } catch (error) {

@@ -6,6 +6,7 @@ var logger = require('morgan');
 const passport = require('passport');
 // Initialize database connection
 require('./app_api/models/database');
+// Configure passport strategies
 require('./app_api/models/passport');
 
 // rest api router
