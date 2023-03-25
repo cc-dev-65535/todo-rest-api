@@ -31,7 +31,7 @@ async function createTodo(req, res) {
                         .json(error);
         }
         if (!user) {
-            return res.status(400)
+            return res.status(404)
                         .json({ "error" : "authentication unsuccessful" });
         }
         const newTodo = new Todo({ author: req.body.author,
@@ -68,7 +68,17 @@ async function listTodosByCategory(req, res) {
 
 // READ todos by userID
 async function listTodosByUser(req, res) {
-
+    let userTodos;
+    try{
+        userTodos = await Todo.find({ owner: req.params.userID })
+                                    .select('-owner')
+                                    .exec();
+    } catch (error) {
+        return res.status(400)
+                    .json(error);
+    }
+    res.status(200)
+        .json(userTodos);
 }
 
 
@@ -85,43 +95,72 @@ function updateTodo(req, res) {
                         .json(error);
         }
         if (!user) {
-            return res.status(400)
+            return res.status(404)
                         .json({ "error" : "authentication unsuccessful" });
         }
         let todoToUpdate;
         try{
-            todoToUpdate = await Todo.find({ _id: req.params.todoID }).exec();
+            todoToUpdate = await Todo.findOne({ _id: req.params.todoID }).exec();
         } catch (error) {
             return res.status(400)
                         .json(error);
         }
         if (todoToUpdate.owner !== user.userID) {
-            return res.status(400)
+            return res.status(401)
                         .json({ "error" : "not authorized" });
         }
         todoToUpdate.author = req.body.author;
         todoToUpdate.description = req.body.description;
         todoToUpdate.category = req.body.category;
         try {
-            await newTodo.save();
+            await todoToUpdate.save();
         } catch (error) {
             return res.status(400)
                         .json(error);
         }
         return res.status(204)
-                    .json({ "success" : "todo updated"});
+                    .json({ "success" : "todo updated" });
     }))(req, res);
 }
 
 // DELETE a todo
 function deleteTodo(req, res) {
-
+    (passport.authenticate('jwt', async (error, user) => {
+        if (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        if (!user) {
+            return res.status(404)
+                        .json({ "error" : "authentication unsuccessful" });
+        }
+        let todoToDelete;
+        try{
+            todoToDelete = await Todo.findOne({ _id: req.params.todoID }).exec();
+        } catch (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        if (todoToDelete.owner !== user.userID) {
+            return res.status(401)
+                        .json({ "error" : "not authorized" });
+        }
+        try{
+            await Todo.findOneAndRemove({ _id: req.params.todoID }).exec();
+        } catch (error) {
+            return res.status(404)
+                        .json(error);
+        }
+        return res.status(204)
+                    .json({ "success" : "todo deleted" });
+    }))(req, res);
 }
 
 module.exports = {
     listAllTodos,
     createTodo,
     listTodosByCategory,
+    listTodosByUser,
     updateTodo,
     deleteTodo
 };

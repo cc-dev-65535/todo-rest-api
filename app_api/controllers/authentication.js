@@ -30,13 +30,17 @@ async function login(req, res) {
     }
     
     (passport.authenticate('local', (error, user) => {
+        if (error) {
+            return res.status(400)
+                        .json(error);
+        }
         if (user) {
             const token = user.createJwt();
             return res.status(200)
                         .json({ "token": token });
         }
-        return res.status(400)
-                    .json(error);
+        return res.status(404)
+                    .json({ "error" : "authentication unsuccessful" });
     }))(req, res);
 }
 
