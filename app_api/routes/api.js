@@ -7,10 +7,11 @@ const controllerAuthentication = require('../controllers/authentication');
 router.route('/todos')
         .get(controllerTodo.listAllTodos)
         .post(controllerTodo.createTodo);
-router.get('/todos/:category', controllerTodo.listTodosByCategory);
+router.get('/todos/category/:category', controllerTodo.listTodosByCategory);
+router.get('/todos/user/:userID', controllerTodo.listTodosByUser);
 
 // routing for UPDATE and DELETE requests
-router.route('/todos/:todosID')
+router.route('/todos/:todoID')
         .put(controllerTodo.updateTodo)
         .delete(controllerTodo.deleteTodo);
 

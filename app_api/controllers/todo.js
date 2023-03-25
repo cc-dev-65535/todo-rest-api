@@ -22,7 +22,7 @@ async function listAllTodos(req, res) {
 async function createTodo(req, res) {
     if (!req.body.author || !req.body.description || !req.body.category) {
         return res.status(400)
-                    .json({"error": "missing fields"});
+                    .json({ "error": "missing fields" });
     }
 
     (passport.authenticate('jwt', async (error, user) => {
@@ -32,7 +32,7 @@ async function createTodo(req, res) {
         }
         if (!user) {
             return res.status(400)
-                        .json({"error" : "no user found"});
+                        .json({ "error" : "authentication unsuccessful" });
         }
         const newTodo = new Todo({ author: req.body.author,
                                     description: req.body.description, 
@@ -67,13 +67,18 @@ async function listTodosByCategory(req, res) {
 }
 
 // READ todos by userID
-function listTodosByUser() {
+async function listTodosByUser(req, res) {
 
 }
 
 
 // UPDATE a todo
 function updateTodo(req, res) {
+    if (!req.body.author || !req.body.description || !req.body.category) {
+        return res.status(400)
+                    .json({ "error": "missing fields" });
+    }
+
     (passport.authenticate('jwt', async (error, user) => {
         if (error) {
             return res.status(400)
@@ -81,9 +86,29 @@ function updateTodo(req, res) {
         }
         if (!user) {
             return res.status(400)
-                        .json({"error" : "no user found"});
+                        .json({ "error" : "authentication unsuccessful" });
         }
-        return res.status(200)
+        let todoToUpdate;
+        try{
+            todoToUpdate = await Todo.find({ _id: req.params.todoID }).exec();
+        } catch (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        if (todoToUpdate.owner !== user.userID) {
+            return res.status(400)
+                        .json({ "error" : "not authorized" });
+        }
+        todoToUpdate.author = req.body.author;
+        todoToUpdate.description = req.body.description;
+        todoToUpdate.category = req.body.category;
+        try {
+            await newTodo.save();
+        } catch (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        return res.status(204)
                     .json({ "success" : "todo updated"});
     }))(req, res);
 }

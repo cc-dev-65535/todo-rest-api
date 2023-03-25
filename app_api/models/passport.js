@@ -33,8 +33,7 @@ passport.use(new JwtStrategy(opts,
     async function(jwtPayload, callback) {
         let user = false;
         try {
-            console.log(jwtPayload);
-            user = await User.findOne({ userID: jwtPayload.sub }).exec();
+            user = await User.findOne({ userID: jwtPayload.userID }).exec();
         } catch (error) {
             return callback(error, false);
         }

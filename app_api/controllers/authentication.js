@@ -6,7 +6,7 @@ const User = mongoose.model('User');
 async function register(req, res) {
     if (!req.body.username || !req.body.password) {
         return res.status(400)
-                    .json({"error": "missing fields"});
+                    .json({ "error": "missing fields" });
     }
 
     const user = new User({ userID: req.body.username });
@@ -19,21 +19,21 @@ async function register(req, res) {
                     .json(error);
     }
     res.status(200)
-        .json({"success": "user account created"});
+        .json({ "success": "user account created" });
 }
 
 // handle a user login request
 async function login(req, res) {
     if (!req.body.username || !req.body.password) {
         return res.status(400)
-                    .json({"error": "missing fields"});
+                    .json({ "error": "missing fields" });
     }
     
     (passport.authenticate('local', (error, user) => {
         if (user) {
             const token = user.createJwt();
             return res.status(200)
-                        .json({"token": token});
+                        .json({ "token": token });
         }
         return res.status(400)
                     .json(error);
