@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // generate a jsonwebtoken for a successfully logged in user
-userSchema.methods.generateJwt = function () {
-    const token = jwt.sign({userID: this.userID}, 'secret');
+userSchema.methods.createJwt = function () {
+    const token = jsonWebToken.sign({userID: this.userID}, 'secret');
     return token;
 };
 

@@ -1,21 +1,23 @@
 const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-passport.use(new Strategy (
-    function(username, password, done) {
-      User.findOne({ userID: username }, function (err, user) {
-        if (err) { 
+passport.use(new LocalStrategy (
+    async function(username, password, done) {
+        let user = false;
+        try {
+            user = await User.findOne({ userID: username }).exec();
+        }
+        catch (err) {
             return done(err); 
         }
         if (!user) { 
             return done(null, false); 
         }
-        if (!user.validatePassword(password)) { 
-            return done(null, false); 
+        if (!user.validatePassword(password)) {
+            return done(null, false);
         }
         return done(null, user);
-      });
     }
 ));

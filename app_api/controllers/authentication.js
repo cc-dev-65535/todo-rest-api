@@ -28,9 +28,19 @@ async function login(req, res) {
                     .json({"message": "missing fields"});
     }
     
-    passport.authenticate('local', (err, user, msg) => {
-        
-    })(req, res)
+    (passport.authenticate('local', (err, user, msg) => {
+        if (err) {
+            return res.status(400)
+                        .json(err);
+        }
+        if (user) {
+            const token = user.createJwt();
+            return res.status(200)
+                        .json({token});
+        }
+        return res.status(400)
+                    .json(err);
+    }))(req, res);
 }
 
 // handle a user logout request
