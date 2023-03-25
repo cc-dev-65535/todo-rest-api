@@ -1,3 +1,4 @@
+const passport = require('passport');
 const mongoose = require('mongoose');
 // retrieve the previously defined todo model
 const Todo = mongoose.model('Todo');
@@ -6,7 +7,7 @@ const Todo = mongoose.model('Todo');
 async function listAllTodos(req, res) {
     let allTodos;
     try {
-        allTodos = await Todo.find({})
+        allTodos = await Todo.find({ })
                                 .select('-owner')
                                 .exec();
     } catch (error) {
@@ -24,18 +25,29 @@ async function createTodo(req, res) {
                     .json({"error": "missing fields"});
     }
 
-    const newTodo = new Todo({ author: req.body.author,
-                                description: req.body.description, 
-                                category: req.body.category});
-    let savedTodo;
-    try {
-        savedTodo = await newTodo.save();
-    } catch (error) {
-        return res.status(400)
-                    .json(error);
-    }
-    res.status(201)
-        .json(savedTodo);
+    (passport.authenticate('jwt', async (error, user) => {
+        if (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        if (!user) {
+            return res.status(400)
+                        .json({"error" : "no user found"});
+        }
+        const newTodo = new Todo({ author: req.body.author,
+                                    description: req.body.description, 
+                                    category: req.body.category,
+                                    owner: user.userID });
+        let savedTodo;
+        try {
+            savedTodo = await newTodo.save();
+        } catch (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        return res.status(201)
+                    .json(savedTodo);
+    }))(req, res);
 }
 
 
@@ -62,7 +74,18 @@ function listTodosByUser() {
 
 // UPDATE a todo
 function updateTodo(req, res) {
-
+    (passport.authenticate('jwt', async (error, user) => {
+        if (error) {
+            return res.status(400)
+                        .json(error);
+        }
+        if (!user) {
+            return res.status(400)
+                        .json({"error" : "no user found"});
+        }
+        return res.status(200)
+                    .json({ "success" : "todo updated"});
+    }))(req, res);
 }
 
 // DELETE a todo

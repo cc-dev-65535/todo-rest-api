@@ -26,13 +26,15 @@ passport.use(new LocalStrategy (
 
 
 let opts = {}
+// jwt should be set in Authorization HTTP header with Bearer scheme
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = 'secret';
 passport.use(new JwtStrategy(opts, 
-    async function(jwt_payload, callback) {
+    async function(jwtPayload, callback) {
         let user = false;
         try {
-            user = await User.findOne({id: jwt_payload.sub}).exec();
+            console.log(jwtPayload);
+            user = await User.findOne({ userID: jwtPayload.sub }).exec();
         } catch (error) {
             return callback(error, false);
         }
