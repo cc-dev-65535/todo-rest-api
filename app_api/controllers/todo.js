@@ -11,7 +11,7 @@ async function listAllTodos(req, res) {
                                 .select('-owner')
                                 .exec();
     } catch (error) {
-        return res.status(400)
+        return res.status(404)
                     .json(error);
     }
     res.status(200)
@@ -59,7 +59,7 @@ async function listTodosByCategory(req, res) {
                                     .select('-owner')
                                     .exec();
     } catch (error) {
-        return res.status(400)
+        return res.status(404)
                     .json(error);
     }
     res.status(200)
@@ -74,7 +74,7 @@ async function listTodosByUser(req, res) {
                                     .select('-owner')
                                     .exec();
     } catch (error) {
-        return res.status(400)
+        return res.status(404)
                     .json(error);
     }
     res.status(200)
@@ -102,7 +102,7 @@ function updateTodo(req, res) {
         try{
             todoToUpdate = await Todo.findOne({ _id: req.params.todoID }).exec();
         } catch (error) {
-            return res.status(400)
+            return res.status(404)
                         .json(error);
         }
         if (todoToUpdate.owner !== user.userID) {
@@ -138,7 +138,7 @@ function deleteTodo(req, res) {
         try{
             todoToDelete = await Todo.findOne({ _id: req.params.todoID }).exec();
         } catch (error) {
-            return res.status(400)
+            return res.status(404)
                         .json(error);
         }
         if (todoToDelete.owner !== user.userID) {
