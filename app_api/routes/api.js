@@ -9,6 +9,7 @@ router.route('/todos')
         .post(controllerTodo.createTodo);
 router.get('/todos/category/:category', controllerTodo.listTodosByCategory);
 router.get('/todos/user/:userID', controllerTodo.listTodosByUser);
+router.get('/todos/description/:keyword', controllerTodo.listTodosByDescription);
 
 // routing for UPDATE and DELETE requests
 router.route('/todos/:todoID')

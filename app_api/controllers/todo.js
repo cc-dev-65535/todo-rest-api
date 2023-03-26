@@ -77,6 +77,18 @@ async function listTodosByUser(req, res) {
         .json(userTodos);
 }
 
+// READ todos by keyword in description
+async function listTodosByDescription(req, res) {
+    let containsTodos;
+    try{
+        containsTodos = await Todo.find({ description : { $regex: req.params.keyword, $options: "i" } }).exec();
+    } catch (error) {
+        return res.status(404)
+                    .json(error);
+    }
+    res.status(200)
+        .json(containsTodos);
+}
 
 // UPDATE a todo
 function updateTodo(req, res) {
@@ -157,6 +169,7 @@ module.exports = {
     createTodo,
     listTodosByCategory,
     listTodosByUser,
+    listTodosByDescription,
     updateTodo,
     deleteTodo
 };
