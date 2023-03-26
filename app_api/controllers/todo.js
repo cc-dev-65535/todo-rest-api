@@ -7,9 +7,7 @@ const Todo = mongoose.model('Todo');
 async function listAllTodos(req, res) {
     let allTodos;
     try {
-        allTodos = await Todo.find({ })
-                                .select('-owner')
-                                .exec();
+        allTodos = await Todo.find({ }).exec();
     } catch (error) {
         return res.status(404)
                     .json(error);
@@ -55,9 +53,7 @@ async function createTodo(req, res) {
 async function listTodosByCategory(req, res) {
     let categoryTodos;
     try{
-        categoryTodos = await Todo.find({ category: req.params.category })
-                                    .select('-owner')
-                                    .exec();
+        categoryTodos = await Todo.find({ category: req.params.category }).exec();
     } catch (error) {
         return res.status(404)
                     .json(error);
